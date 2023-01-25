@@ -71,11 +71,11 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         EnumerableSet.add(addressToIds[msg.sender], tempId);
         EnumerableSet.add(sellIds, tempId);
         //retrieving scoreTokens from the caller
-        (bool success,) = IERC20(scoreTokenAddress).transferFrom(msg.sender, address(this), stAmount);
+        bool success = IERC20(scoreTokenAddress).transferFrom(msg.sender, address(this), stAmount);
         if(!success){
             revert cannotRetrieveScoreToken(msg.sender);
         }
-        emit sellOrderCreated(msg.sender, tempId, stAmount, requestingEkoStable, requestingAmount);
+        emit sellOrderCreated(msg.sender, tempId, stAmount, requestingEkoStable, ekoStableAmount);
         ++actualId;
         return tempId;
     }
@@ -101,9 +101,9 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         EnumerableSet.remove(addressToIds[tempOrder.orderOwner], orderId);
         EnumerableSet.remove(sellIds, orderId);
         //retrieving the ekoStable from the buyer and sending them to the seller
-        (bool success,) = IERC20(tempOrder.requestingEkoStable).transferFrom(msg.sender, tempOrder.orderOwner, tempOrder.requestingAmount);
+        bool success = IERC20(tempOrder.requestingToken).transferFrom(msg.sender, tempOrder.orderOwner, tempOrder.requestingAmount);
         if(!success){
-            revert cannotRetrieveEkoStable(tempOrder.requestingEkoStable, msg.sender);
+            revert cannotRetrieveEkoStable(tempOrder.requestingToken, msg.sender);
         }
         //retrieving the scoreToken on the sc and sending them to the buyer
         (success) = IERC20(scoreTokenAddress).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
@@ -133,9 +133,9 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         EnumerableSet.add(addressToIds[msg.sender], tempId);
         EnumerableSet.add(buyIds, tempId);
         //retrieving the ekoStable from the caller
-        (bool success,) = IERC20(ekoStableAddress).transferFrom(msg.sender, address(this), givingAmount);
+        bool success = IERC20(ekoStableAddress).transferFrom(msg.sender, address(this), givingAmount);
         if(!success){
-            revert cannotRetrieveEkoStable(msg.sender);
+            revert cannotRetrieveEkoStable(ekoStableAddress, msg.sender);
         }
         emit buyOrderCreated(msg.sender, tempId, ekoStableAddress, givingAmount, requestingScoreToken);
         ++actualId;
@@ -163,14 +163,14 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         EnumerableSet.remove(addressToIds[tempOrder.orderOwner], orderId);
         EnumerableSet.remove(buyIds, orderId);
         //sending the scoreToken from the seller to the buyer
-        (bool success, ) = IERC20(scoreTokenAddress).transferFrom(msg.sender, tempOrder.orderOwner, tempOrder.requestingAmount);
+        bool success = IERC20(scoreTokenAddress).transferFrom(msg.sender, tempOrder.orderOwner, tempOrder.requestingAmount);
          if(!success){
             revert cannotRetrieveScoreToken(msg.sender);
         }
         //sending the ekostable from the sc to the seller
-        (success,) = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
+        success = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
         if(!success){
-            revert cannotRetrieveEkoStable(tempOrder.givingToken, tempOrder.givingAmount);
+            revert cannotRetrieveEkoStable(tempOrder.givingToken, address(this));
         }
         emit buyOrderFulfilled(orderId, tempOrder.orderOwner, msg.sender);
     }
@@ -201,7 +201,7 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         delete idToOrder[orderId];
         EnumerableSet.remove(addressToIds[msg.sender], orderId);
         //retrieving the tokens he sent to the sc
-        (bool success,) = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
+        bool success = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
         if(isBuyOrder == orderType.Buy){
             if(!success){
                 revert cannotRetrieveEkoStable(tempOrder.givingToken, address(this));
@@ -217,9 +217,9 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
     /*This view function allows the caller to see all the order ids associated to an address. Maybe usefull on the front end
     owner = the address of the orders owner
     */
-    function getAddressToIds(address owner) external view returns(uint[]){
+    function getAddressToIds(address owner) external view returns(uint[] memory){
         uint length = EnumerableSet.length(addressToIds[owner]);
-        uint ids = new uint[](length);
+        uint[] memory ids = new uint[](length);
         for(uint i = 0; i < length; ++i){
             ids[i] = EnumerableSet.at(addressToIds[owner], i);
         }
@@ -229,8 +229,8 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
     This view function allows the caller the have a list of the last buy orders created. Maybe usefull on the front end
     orderToShow = the number of the order to display
     */
-    function getLastBuysOrders(uint ordersToShow) external view returns(uint[]){
-        uint[] ids;
+    function getLastBuysOrders(uint ordersToShow) external view returns(uint[] memory){
+        uint[] memory ids;
         uint length = EnumerableSet.length(buyIds);
         if(ordersToShow > length){
             ids = new uint[](length);
@@ -243,14 +243,14 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
                 ids[i] = EnumerableSet.at(buyIds, length - i);
             }
         }
-        return ids[];
+        return ids;
     }
     /*
     This view function allows the caller the have a list of the last sell orders created. Maybe usefull on the front end
     orderToShow = the number of the order to display
     */
-    function getLastSellOrders(uint ordersToShow) external view returns(uint[]){
-        uint ids[];
+    function getLastSellOrders(uint ordersToShow) external view returns(uint[] memory){
+        uint[] memory ids;
         uint length = EnumerableSet.length(sellIds);
         if(ordersToShow > length){
             ids = new uint[](length);
