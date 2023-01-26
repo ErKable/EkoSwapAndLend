@@ -95,8 +95,8 @@ describe.only(`P2P exchange test`, function(){
 
         await scoreToken.connect(userOne).approve(exchangeAddress, scoreAmount)
         await exchange.connect(userOne).createSellScoreTokensOrder(scoreAmount, ekoUSDTAddress, ekoUsdtAmount) 
-
         console.log(`Order created successfully`)
+
         let userBalAfter = await scoreToken.balanceOf(userOneAddress)
         let contBalAfter = await scoreToken.balanceOf(exchangeAddress)
         console.log(`After the creation of the order user one has ${userBalAfter} scoreToken and the smart contract has ${contBalAfter} scoreToken`)
@@ -121,7 +121,7 @@ describe.only(`P2P exchange test`, function(){
        
         let ids = await exchange.getAddressToIds(userOneAddress)
         //console.log(ids, typeof(ids))
-        console.log(`${await exchange.idToOrder(ids[0])}`)
+        //console.log(`${await exchange.idToOrder(ids[0])}`)
         await ekoUSDT.connect(userTwo).approve(exchangeAddress, ekoUsdtAmount)
         await exchange.connect(userTwo).buyScoreTokenFromSellOrder(Number(ids[0]))
 
@@ -129,7 +129,7 @@ describe.only(`P2P exchange test`, function(){
         let userTwoESBalAfter = await ekoUSDT.balanceOf(userTwoAddress)        
         console.log(`User two balances after buying from the sell order:\nscoreToken = ${userTwoSTBalAfter},\nekoUSDT = ${userTwoESBalAfter}`)
         expect(Number(userTwoSTBalBefore)).to.be.below(Number(userTwoSTBalAfter))
-        expect(Number(userOneESbalBefore)).to.be.greaterThan(Number(userTwoESBalAfter))
+        expect(Number(userTwoESBalBefore)).to.be.greaterThan(Number(userTwoESBalAfter))
         let userOneESbalAfter = await ekoUSDT.balanceOf(userOneAddress)
         console.log(`userOne ekoStable balance after user two has bought his order, ekoUSDT bal = ${userOneESbalAfter}`)
         expect(Number(userOneESbalBefore)).to.be.below(Number(userOneESbalAfter))
@@ -138,5 +138,51 @@ describe.only(`P2P exchange test`, function(){
         expect(Number(contractSTbalBef)).to.be.greaterThan(Number(contractSTbalAft))
     })
 
+    it(`Should create a buy score token order with user one`, async function(){
+        let scoreAmount = "150000000000"
+        let ekoUsdtAmount = "150000"
+        let userBalbefore = await ekoUSDT.balanceOf(userOneAddress)
+        let contractBalBefore = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`Before the creation of the order user one has ${userBalbefore} ekoUSDT and the smart contract has ${contractBalBefore} ekoUSDT`)
+
+        await ekoUSDT.connect(userOne).approve(exchangeAddress, ekoUsdtAmount)
+        await exchange.connect(userOne).createBuyScoreTokensOrder(ekoUSDTAddress, ekoUsdtAmount, scoreAmount)
+        console.log(`Order created successfully`)
+
+        let userBalAfter = await ekoUSDT.balanceOf(userOneAddress)
+        let contBalAfter = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`After the creation of the order user one has ${userBalAfter} ekoUSDT and the smart contract has ${contBalAfter} ekoUSDT`)
+        expect(Number(userBalbefore)).to.be.greaterThan(Number(userBalAfter))
+        expect(Number(contractBalBefore)).to.be.below(Number(contBalAfter))
+    })
+
+    it(`Should sell scoreTokens to user one order with user two`, async function(){
+        let scoreAmount = "150000000000"
+        let userTwoSTBalBefore = await scoreToken.balanceOf(userTwoAddress)
+        let userTwoESBalBefore = await ekoUSDT.balanceOf(userTwoAddress)
+        console.log(`User two balances before buying from the sell order:\nscoreToken = ${userTwoSTBalBefore},\nekoUSDT = ${userTwoESBalBefore}`)
+        let userOneSTbalBefore = await scoreToken.balanceOf(userOneAddress)
+        console.log(`userOne scoreToken balance before user two buys his order, scoreToken bal = ${userOneSTbalBefore}`)
+        let contractESbalBef = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`Exchange ekoUSDT balance before user two buys the order, ekoUSDT bal = ${contractESbalBef}`)
+
+        let ids = await exchange.getAddressToIds(userOneAddress)
+        await scoreToken.connect(userTwo).approve(exchangeAddress, scoreAmount)
+        await exchange.connect(userTwo).sellScoreTokensToABuyOrder(Number(ids[0]))
+
+        let userTwoSTBalAfter = await scoreToken.balanceOf(userTwoAddress)        
+        let userTwoESBalAfter = await ekoUSDT.balanceOf(userTwoAddress)        
+        console.log(`User two balances after buying from the sell order:\nscoreToken = ${userTwoSTBalAfter},\nekoUSDT = ${userTwoESBalAfter}`)
+        expect(Number(userTwoSTBalBefore)).to.be.greaterThan(Number(userTwoSTBalAfter))
+        expect(Number(userTwoESBalBefore)).to.be.below(Number(userTwoESBalAfter))
+
+        let userOneSTbalAfter = await scoreToken.balanceOf(userOneAddress)
+        console.log(`userOne scoreToken balance after user two has bought his order, scoreToken bal = ${userOneSTbalAfter}`)
+        expect(Number(userOneSTbalBefore)).to.be.below(Number(userOneSTbalAfter))
+
+        let contractESbalAft = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`Exchange ekoUSDT balance before user two buys the order, ekoUSDT bal = ${contractESbalAft}`)
+        expect(Number(contractESbalBef)).to.be.greaterThan(Number(contractESbalAft))
+    })
     
 })
