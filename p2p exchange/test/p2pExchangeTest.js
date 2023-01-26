@@ -184,5 +184,50 @@ describe.only(`P2P exchange test`, function(){
         console.log(`Exchange ekoUSDT balance before user two buys the order, ekoUSDT bal = ${contractESbalAft}`)
         expect(Number(contractESbalBef)).to.be.greaterThan(Number(contractESbalAft))
     })
-    
+
+    it(`Should create a buy score token order with user two`, async function(){
+        let scoreAmount = "150000000000"
+        let ekoUsdtAmount = "150000"
+
+        let userTwoESBalBef = await ekoUSDT.balanceOf(userTwoAddress)
+        let userTwoSTBalBef = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two ekoUSDT balace: ${userTwoESBalBef}, scoreToken balance: ${userTwoSTBalBef}`)
+
+        let contractESBalBef = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`Smart contract ekoUSDT balance before: ${contractESBalBef}`)
+
+        await ekoUSDT.connect(userTwo).approve(exchangeAddress, ekoUsdtAmount)
+        await exchange.connect(userTwo).createBuyScoreTokensOrder(ekoUSDTAddress, ekoUsdtAmount, scoreAmount)
+
+        let userTwoESBalAft = await ekoUSDT.balanceOf(userTwoAddress)
+        let userTwoSTBalAft = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two ekoUSDT balace: ${userTwoESBalAft}, scoreToken after: ${userTwoSTBalAft}`)
+        expect(Number(userTwoESBalBef)).to.be.greaterThan(Number(userTwoESBalAft))
+
+        let contractESBalAft = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`Smart contract ekoUSDT balance after: ${contractESBalAft}`)
+        expect(Number(contractESBalBef)).to.be.below(Number(contractESBalAft))
+    })
+
+    it(`Should withdraw the buyOrder with user two`, async function(){
+        let ids = await exchange.getAddressToIds(userTwoAddress)
+        //console.log(ids) //2
+        let userTwoESBalBef = await ekoUSDT.balanceOf(userTwoAddress)
+        console.log(`user two ekosUDT balance: ${userTwoESBalBef}`)
+        let contractESBalBef = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`smart contract ekoUSDT balance: ${contractESBalBef}`)
+
+        await exchange.connect(userTwo).withdrawOrder(ids[0], 0)
+
+        let userTwoESBalAft = await ekoUSDT.balanceOf(userTwoAddress)
+        console.log(`user two ekosUDT balance: ${userTwoESBalAft}`)
+        let contractESBalAft = await ekoUSDT.balanceOf(exchangeAddress)
+        console.log(`smart contract ekoUSDT balance: ${contractESBalAft}`)
+        expect(Number(userTwoESBalBef)).to.be.below(Number(userTwoESBalAft))
+        expect(Number(contractESBalBef)).to.be.greaterThan(Number(contractESBalAft))
+    })
+
+    it(`Should revert the second time withdrawing the buyOrder with userTwo`, async function(){
+        await expect(exchange.connect(userTwo).withdrawOrder(2, 0)).to.revertedWith("unexistingOrder")
+    })
 })
