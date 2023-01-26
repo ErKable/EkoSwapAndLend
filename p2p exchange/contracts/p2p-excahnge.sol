@@ -199,7 +199,7 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
         delete idToOrder[orderId];
         EnumerableSet.remove(addressToIds[msg.sender], orderId);
         //retrieving the tokens he sent to the sc
-        bool success = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
+        bool success = IERC20(tempOrder.givingToken).transfer(msg.sender, tempOrder.givingAmount);
         if(isBuyOrder == orderType.Buy){
             if(!success){
                 revert cannotRetrieveEkoStable(tempOrder.givingToken, address(this));
