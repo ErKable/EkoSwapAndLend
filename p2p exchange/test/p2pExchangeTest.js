@@ -230,4 +230,72 @@ describe.only(`P2P exchange test`, function(){
     it(`Should revert the second time withdrawing the buyOrder with userTwo`, async function(){
         await expect(exchange.connect(userTwo).withdrawOrder(2, 0)).to.revertedWith("unexistingOrder")
     })
+
+    it(`Should create a sell score token order with user two`, async function(){
+        let scoreAmount = "150000000000"
+        let ekoUsdtAmount = "150000"
+
+        let userTwoESBalBef = await ekoUSDT.balanceOf(userTwoAddress)
+        let userTwoSTBalBef = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two ekoUSDT balace: ${userTwoESBalBef}, scoreToken balance: ${userTwoSTBalBef}`)
+
+        let contractSTBalBef = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`Smart contract scoreTokenBalance before: ${contractSTBalBef}`)
+
+        await scoreToken.connect(userTwo).approve(exchangeAddress, scoreAmount)
+        await exchange.connect(userTwo).createSellScoreTokensOrder(scoreAmount, ekoUSDTAddress, ekoUsdtAmount);
+
+        let userTwoESBalAft = await ekoUSDT.balanceOf(userTwoAddress)
+        let userTwoSTBalAft = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two ekoUSDT balace: ${userTwoESBalAft}, scoreToken balance: ${userTwoSTBalAft}`)
+        expect(Number(userTwoSTBalBef)).to.greaterThan(Number(userTwoSTBalAft))
+
+        let contractSTBalAft = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`Smart contract scoreTokenBalance before: ${contractSTBalAft}`)
+        expect(Number(contractSTBalBef)).to.be.below(Number(contractSTBalAft))         
+    })
+
+    it(`Should withdraw the sell score token order with user two`, async function(){
+        let ids = await exchange.getAddressToIds(userTwoAddress)
+        //console.log(ids) //3
+        let userTwoSTBalBef = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two score token balance before: ${userTwoSTBalBef}`)
+        let contractSTBalBef = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`Smart contract score token balance: ${contractSTBalBef}`)
+
+        await exchange.connect(userTwo).withdrawOrder(ids[0], 1)
+
+        let userTwoSTBalAft = await scoreToken.balanceOf(userTwoAddress)
+        console.log(`User two scoretoken balance after: ${userTwoSTBalAft}`)
+        expect(Number(userTwoSTBalBef)).to.be.below(Number(userTwoSTBalAft))
+        let contractSTBalAft = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`Smart contract scoreToken balance after ${contractSTBalAft}`)
+        expect(Number(contractSTBalBef)).to.be.greaterThan(Number(contractSTBalAft))
+    })
+
+    it(`Should revert the second time withdrawing the sellOrder with user two`, async function(){
+        await expect(exchange.connect(userTwo).withdrawOrder(3, 1)).to.revertedWith("unexistingOrder")
+    })
+
+    it(`Should create a sell score token order with user one`, async function(){
+        let scoreAmount = "150000000000"
+        let ekoUsdtAmount = "150000"
+        let userBalbefore = await scoreToken.balanceOf(userOneAddress)
+        let contractBalBefore = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`Before the creation of the order user one has ${userBalbefore} scoreTokens and the smart contract has ${contractBalBefore} scoreToken`)
+
+        await scoreToken.connect(userOne).approve(exchangeAddress, scoreAmount)
+        await exchange.connect(userOne).createSellScoreTokensOrder(scoreAmount, ekoUSDTAddress, ekoUsdtAmount) 
+        console.log(`Order created successfully`)
+
+        let userBalAfter = await scoreToken.balanceOf(userOneAddress)
+        let contBalAfter = await scoreToken.balanceOf(exchangeAddress)
+        console.log(`After the creation of the order user one has ${userBalAfter} scoreToken and the smart contract has ${contBalAfter} scoreToken`)
+        expect(Number(userBalbefore)).to.be.greaterThan(Number(userBalAfter))
+        expect(Number(contractBalBefore)).to.be.below(Number(contBalAfter))
+    })
+
+    it(`Should revert when trying to withdraw userOne's order with userTwo`, async function(){
+        await expect(exchange.connect(userTwo).withdrawOrder(4, 1)).to.revertedWith("orderAlreadyFulfilled")
+    })
 })
