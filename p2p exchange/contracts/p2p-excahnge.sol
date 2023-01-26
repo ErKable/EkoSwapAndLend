@@ -106,7 +106,7 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
             revert cannotRetrieveEkoStable(tempOrder.requestingToken, msg.sender);
         }
         //retrieving the scoreToken on the sc and sending them to the buyer
-        (success) = IERC20(scoreTokenAddress).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
+        (success) = IERC20(scoreTokenAddress).transfer(msg.sender, tempOrder.givingAmount);
         if(!success){
             revert cannotRetrieveScoreToken(address(this));
         }
@@ -182,16 +182,14 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
     function withdrawOrder(uint orderId, orderType isBuyOrder) external {
         //cheking if the id exists and removing it from the appropriate list
         if(isBuyOrder == orderType.Buy){
-            if(!EnumerableSet.contains(buyIds, orderId)){
-                revert unexistingOrder(orderId);
+            if(EnumerableSet.contains(buyIds, orderId)){                
                 EnumerableSet.remove(buyIds, orderId);
-            } else{
-                if(!EnumerableSet.contains(sellIds, orderId)){
-                    revert unexistingOrder(orderId);
-                    EnumerableSet.remove(sellIds, orderId);
-                }
-            }
-        }
+            } else revert unexistingOrder(orderId);
+        } else{
+            if(EnumerableSet.contains(sellIds, orderId)){
+                EnumerableSet.remove(sellIds, orderId);
+            } else revert unexistingOrder(orderId);
+        }        
         //checking if the caller is the owner
         if(!EnumerableSet.contains(addressToIds[msg.sender], orderId)){
             revert orderAlreadyFulfilled(msg.sender, orderId);
