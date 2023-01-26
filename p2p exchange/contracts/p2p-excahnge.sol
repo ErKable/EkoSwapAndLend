@@ -168,7 +168,7 @@ contract peer2peerExchange is ReentrancyGuard, Ownable{
             revert cannotRetrieveScoreToken(msg.sender);
         }
         //sending the ekostable from the sc to the seller
-        success = IERC20(tempOrder.givingToken).transferFrom(address(this), msg.sender, tempOrder.givingAmount);
+        success = IERC20(tempOrder.givingToken).transfer(msg.sender, tempOrder.givingAmount);
         if(!success){
             revert cannotRetrieveEkoStable(tempOrder.givingToken, address(this));
         }
