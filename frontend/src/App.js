@@ -1,20 +1,20 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Navbar from "./components/Navbar"
+import Navbar from "./components/Navbar/Index"
 import Homepage from './pages/Homepage'
-import Ekoswap from './pages/Ekoswap'
-import Ekolend from './pages/Ekolend';
-import Exchange from './pages/Exchange';
+import Ekoswap from './pages/EkoSwap/Ekoswap'
+import Ekolend from './pages/Ekolend/Ekolend';
+import Exchange from './pages/Exchange/Exchange';
 
 function App() {
 
   return (
 
-    <div>
-
-      <Navbar/>
+    <div className= 'bg-white dark:bg-black transition duration-300 text-primary dark:text-secondary-light h-screen'>
 
       <Router>
+
+        {/* <Navbar/> */}
 
         <Routes>
 
