@@ -1,25 +1,39 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
+import Navbar from "./components/Navbar/Index"
+import Homepage from './pages/Homepage'
+import Ekoswap from './pages/EkoSwap/Ekoswap'
+import Ekolend from './pages/Ekolend/Ekolend';
+import Exchange from './pages/Exchange/Exchange';
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+
+    <div className= 'bg-white dark:bg-black transition duration-300 text-primary dark:text-secondary-light h-screen'>
+
+      <Router>
+
+        {/* <Navbar/> */}
+
+        <Routes>
+
+        <Route path='/' element={<Homepage/>} />
+
+        <Route path='/ekoswap' element={<Ekoswap/>} />
+
+        <Route path='/ekolend' element={<Ekolend/>} />
+
+        <Route path='/exchange' element={<Exchange/>} />
+
+        </Routes>
+
+      </Router>
+
     </div>
-  );
+
+  )
 }
 
-export default App;
+
+export default App
