@@ -1,6 +1,6 @@
 import React from 'react'
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import Navbar from "./components/Navbar/Index"
+import Navbar from "./components/Navbar/Nav"
 import Homepage from './pages/Homepage'
 import Ekoswap from './pages/EkoSwap/Ekoswap'
 import Ekolend from './pages/Ekolend/Ekolend';
@@ -8,13 +8,16 @@ import Exchange from './pages/Exchange/Exchange';
 
 function App() {
 
+
+
+
   return (
 
     <div className= 'bg-white dark:bg-black transition duration-300 text-primary dark:text-secondary-light h-screen'>
 
       <Router>
 
-        {/* <Navbar/> */}
+        <Navbar/>
 
         <Routes>
 
