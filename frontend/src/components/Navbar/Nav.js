@@ -4,28 +4,12 @@ import Web3Modal from "web3modal";
 import { ethers } from "ethers";
 import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import Button from "../Button/Index";
-import Logo from "../../assets/images/thelogo.png"
-
+import Logo from "../../assets/images/thelogo.png";
 
 const providerOptions = {
-  coinbasewallet: {
-    package: CoinbaseWalletSDK, // Required
-    options: {
-      appName: "web3modal", // Required
-      infuraId: "INFURA_ID", // Required
-      rpc: "", // Optional if `infuraId` is provided; otherwise it's required
-      chainId: 1, // Optional. It defaults to 1 if not provided
-      darkMode: false, // Optional. Use dark theme, defaults to false
-    },
-  },
-};
 
-// const web3Modal = new Web3Modal({
-//   network: "mainnet", // optional
-//   cacheProvider: true, // optional
-//   providerOptions, // required
-// });
-
+}
+ 
 function Nav() {
   const { web3Provider, setWeb3Provider } = useState();
 
@@ -48,19 +32,23 @@ function Nav() {
   }
 
   return (
-    <div class="container mx-auto overflow-hidden">
+    <div class="container mx-auto overflow-hidden sticky top-0 bg-white z-10">
       <div class="flex items-center justify-between px-2 py-2 bg-blueGray-50">
         <div class="w-auto">
           <div class="flex flex-wrap items-center">
             <div class="">
-              <Link to="/" >
-              <img src={Logo} alt="logo" className=" mr-28 object-contain h-16 w-16" />
-            </Link> 
+              <Link to="/">
+                <img
+                  src={Logo}
+                  alt="logo"
+                  className=" mr-28 object-contain h-16 w-16"
+                />
+              </Link>
             </div>
           </div>
         </div>
         <div class="w-auto">
-          <div class="flex flex-wrap items-center">
+          <div class="flex flex-wrap items-center ">
             <div class="w-auto hidden lg:block">
               <ul class="flex items-center mr-16 text-primary">
                 <li class="mr-9 font-medium text-lg hover:text-gray-700">
@@ -76,21 +64,19 @@ function Nav() {
             </div>
             <div class="w-auto hidden lg:block">
               <div class="inline-block">
-            
-                        {web3Provider == null ? (
-                          <Button
-                            name={"Connect Wallet"}
-                            className="py-3 px-5 w-full text-white font-semibold border border-indigo-700 rounded-xl focus:ring focus:ring-indigo-300 bg-indigo-600 hover:bg-indigo-700 transition ease-in-out duration-200"
-                            onClick={connectWallet}
-                          />
-                        ) : (
-                          <p>{web3Provider.providers.selectedAddress}</p>
-                        )}
-
-              
+                {web3Provider == null ? (
+                  <Button
+                    name={"Connect Wallet"}
+                    className="py-3 px-5 w-full text-white font-semibold border border-primary rounded-xl focus:ring focus:ring-indigo-300 bg-primary hover:bg-primary transition ease-in-out duration-200"
+                    onClick={connectWallet}
+                  />
+                ) : (
+                  <p>{web3Provider.providers.selectedAddress}</p>
+                )}
               </div>
             </div>
-            <div class="w-auto lg:hidden">
+
+            {/* <div class="w-auto lg:hidden">
               <a href="#">
                 <svg
                   class="navbar-burger text-indigo-600"
@@ -115,23 +101,17 @@ function Nav() {
                   ></path>
                 </svg>
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
-      <div class="hidden navbar-menu fixed top-0 left-0 bottom-0 w-4/6 sm:max-w-xs z-50">
+      {/* <div class="hidden navbar-menu fixed top-0 left-0 bottom-0 w-4/6 sm:max-w-xs z-50">
         <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-80"></div>
         <nav class="relative z-10 px-9 pt-8 bg-white h-full overflow-y-auto">
           <div class="flex flex-wrap justify-between h-full">
             <div class="w-full">
               <div class="flex items-center justify-between -m-2">
-                <div class="w-auto p-2">
-                  {/* <div ref={container} className="animation h-64"></div> */}
-                  {/* <a class="inline-block" href="#">
-                  <img src="flaro-assets/logos/flaro-logo-black.svg" alt="">
-
-                </a> */}
-                </div>
+                <div class="w-auto p-2"></div>
                 <div class="w-auto p-2">
                   <a class="navbar-burger" href="#">
                     <svg
@@ -156,17 +136,29 @@ function Nav() {
             <div class="flex flex-col justify-center py-16 w-full">
               <ul>
                 <li class="mb-12">
-                  <Link to="/Ekoswap" class="font-medium hover:text-gray-700" href="#">
+                  <Link
+                    to="/Ekoswap"
+                    class="font-medium hover:text-gray-700"
+                    href="#"
+                  >
                     Swap
                   </Link>
                 </li>
                 <li class="mb-12">
-                  <Link to="/Ekolend" class="font-medium hover:text-gray-700" href="#">
+                  <Link
+                    to="/Ekolend"
+                    class="font-medium hover:text-gray-700"
+                    href="#"
+                  >
                     Lend
                   </Link>
                 </li>
                 <li class="mb-12">
-                  <Link to="/Exchange" class="font-medium hover:text-gray-700" href="#">
+                  <Link
+                    to="/Exchange"
+                    class="font-medium hover:text-gray-700"
+                    href="#"
+                  >
                     P2P
                   </Link>
                 </li>
@@ -198,7 +190,7 @@ function Nav() {
             </div>
           </div>
         </nav>
-      </div>
+      </div> */}
     </div>
   );
 }
