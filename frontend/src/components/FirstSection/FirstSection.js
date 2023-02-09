@@ -26,8 +26,8 @@ function FirstSection() {
   <section class="bg-blueGray-50">
  
   <div class="overflow-hidden pt-16">
-    <div class="container px-4 mx-auto">
-      <div class="flex flex-wrap px-12 py-5">
+    <div class="container px-2 mx-auto">
+      <div class="flex flex-wrap justify-center">
         <div class="w-full md:w-1/2 p-8">
           <h1 class="mb-6 text-6xl md:text-8xl lg:text-6xl font-bold font-heading md:max-w-xl leading-none">Discover mentors that helps you grow</h1>
           <p class="mb-11 text-lg text-gray-900 font-medium md:max-w-md">Get the best-in-class group mentoring plans and professional benefits for your team</p>
@@ -56,7 +56,7 @@ function FirstSection() {
           </div>
         </div>
         <div className=''>
-        <div ref={container} className="animation"></div>
+        <div ref={container} className="animation w-3/4 "></div>
         </div>
      
       </div>

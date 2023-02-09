@@ -49,7 +49,7 @@ function Nav() {
 
   return (
     <div class="container mx-auto overflow-hidden">
-      <div class="flex items-center justify-between px-4 py-5 bg-blueGray-50">
+      <div class="flex items-center justify-between px-2 py-2 bg-blueGray-50">
         <div class="w-auto">
           <div class="flex flex-wrap items-center">
             <div class="">
@@ -62,7 +62,7 @@ function Nav() {
         <div class="w-auto">
           <div class="flex flex-wrap items-center">
             <div class="w-auto hidden lg:block">
-              <ul class="flex items-center mr-16">
+              <ul class="flex items-center mr-16 text-primary">
                 <li class="mr-9 font-medium text-lg hover:text-gray-700">
                   <Link to="/Ekoswap">Swap</Link>
                 </li>
