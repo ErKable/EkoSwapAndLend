@@ -1,35 +1,14 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import Web3Modal from "web3modal";
 import { ethers } from "ethers";
-import CoinbaseWalletSDK from "@coinbase/wallet-sdk";
 import Button from "../Button/Index";
 import Logo from "../../assets/images/thelogo.png";
 
-const providerOptions = {
 
-}
  
-function Nav() {
-  const { web3Provider, setWeb3Provider } = useState();
+const Nav = () => {
 
-  async function connectWallet() {
-    try {
-      let web3modal = new Web3Modal({
-        cacheProvider: false,
-        providerOptions,
-      });
 
-      const web3ModalInstance = await web3modal.connect();
-      const web3ModalProvider = new ethers.providers(web3ModalInstance);
-
-      if (web3ModalProvider) {
-        setWeb3Provider(web3ModalProvider);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  }
 
   return (
     <div class="container mx-auto overflow-hidden sticky top-0 bg-white z-10">
@@ -64,15 +43,16 @@ function Nav() {
             </div>
             <div class="w-auto hidden lg:block">
               <div class="inline-block">
-                {web3Provider == null ? (
+                {/* {requestAccount == null ? (
                   <Button
                     name={"Connect Wallet"}
                     className="py-3 px-5 w-full text-white font-semibold border border-primary rounded-xl focus:ring focus:ring-indigo-300 bg-primary hover:bg-primary transition ease-in-out duration-200"
-                    onClick={connectWallet}
+                    onClick={requestAccount}
                   />
                 ) : (
-                  <p>{web3Provider.providers.selectedAddress}</p>
-                )}
+                  <h3> {walletAddress} </h3>
+                )} */}
+             
               </div>
             </div>
 
