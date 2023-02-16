@@ -87,8 +87,7 @@ function Index() {
                 : "mSRG-container-inner"
             }
           >
-            {/* Buy */}
-            {/* <Exchange /> */}
+          
           </div>
         </div>
 
@@ -101,8 +100,7 @@ function Index() {
                 : "mSRG-container-inner"
             }
           >
-            {/* Sell */}
-            {/* <Exchange /> */}
+     
           </div>
         </div>
       </div>
