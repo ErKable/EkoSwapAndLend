@@ -8,10 +8,10 @@ import { Link } from "react-router-dom";
 function File() {
   return (
     <div>
-      <div class="container mx-auto px-24 mb-16">
-        <div style={{ backgroundColor: "#ffffff" }}>
+      <div class="mx-auto px-24 pb-16 dark:bg-black bg-white">
+        <div>
           <div
-            class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 pt-20 pb-10 lg:pt-40 lg:pb-20"
+            class="grid grid-cols-1 gap-10 md:grid-cols-2 xl:grid-cols-3 pt-20 pb-10 lg:pt-40 lg:pb-20 container"
             style={{ cursor: "auto" }}
           >
             <Link to="/Ekoswap">

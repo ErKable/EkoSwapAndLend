@@ -59,8 +59,8 @@ const Nav = () => {
 
 
   return (
-    <div class="container mx-auto overflow-hidden sticky top-0 bg-white z-10">
-      <div class="flex items-center justify-between px-2 py-2 bg-blueGray-50">
+    <div class="container mx-auto overflow-hidden sticky top-0 bg-white dark:bg-black z-10">
+      <div class="flex items-center justify-between px-2 py-2">
         <div class="w-auto">
           <div class="flex flex-wrap items-center">
             <div class="">
@@ -91,7 +91,7 @@ const Nav = () => {
               <div
               onClick={() => setTheme(activeTheme)}
               aria-label="Theme Switcher"
-              className="ml-3 bg-primary-light dark:bg-primary-dark p-3 shadow-sm rounded-xl cursor-pointer"
+              className="ml-3 bg-primary-light dark:bg-black p-3 shadow-sm rounded-xl cursor-pointer"
               >
               {activeTheme === 'dark' ? (
                 <FiMoon className="text-ternary-dark hover:text-gray-400 dark:text-ternary-light dark:hover:text-primary-light text-xl" />

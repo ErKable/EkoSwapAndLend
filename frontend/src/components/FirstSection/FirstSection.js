@@ -36,7 +36,7 @@ function FirstSection() {
         <div class="w-full md:w-1/2 px-8 pt-10 pb-5">
 
 
-        <div class="inline-block mb-6 px-2 py-1 font-semibold bg-green-100 rounded-full">
+        <div class="inline-block mb-6 px-2 py-1 font-semibold bg-green-100 dark:text-primary rounded-full">
             <div class="flex flex-wrap items-center -m-1">
               <div class="w-auto p-1"><a class="text-sm" href="">&#x1F44B; Lend, Swap and Exchange </a></div>
               <div class="w-auto p-1">

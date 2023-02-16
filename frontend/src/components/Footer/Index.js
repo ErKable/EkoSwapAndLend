@@ -4,7 +4,7 @@ import Logo from "../../assets/images/thelogo.png"
 function Index() {
   return (
    
-<footer class="p-4 bg-gray-100 rounded-lg shadow md:px-6 md:py-8 ">
+<footer class="p-4 bg-gray-100 dark:bg-black shadow md:px-6 md:py-8 ">
     <div class="sm:flex sm:items-center sm:justify-between">
         <a href="https://flowbite.com/" class="flex items-center mb-4 sm:mb-0">
             <img src={Logo} class="h-8 mr-3" alt="Flowbite Logo" />
