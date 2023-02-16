@@ -3,10 +3,58 @@ import { Link } from "react-router-dom";
 import { ethers } from "ethers";
 import Button from "../Button/Index";
 import Logo from "../../assets/images/thelogo.png";
+import { FiMenu, FiMoon, FiSun, FiX } from 'react-icons/fi';
+import useThemeSwitcher from '../../hooks/useThemeSwitcher';
 
 
  
 const Nav = () => {
+
+  const [activeTheme, setTheme] = useThemeSwitcher();
+
+     // Properties
+
+  const [walletAddress, setWalletAddress] = useState("");
+
+// Helper Functions
+
+  // Requests access to the user's META MASK WALLET
+  // https://metamask.io
+
+    async function requestAccount(){
+
+        console.log('requesting account');
+
+        // ❌ Check if Meta Mask Extension exists 
+
+        if(window.ethereum){
+            console.log('detected');
+
+
+      try {
+        const accounts = await window.ethereum.request({
+          method: "eth_requestAccounts",
+        });
+        setWalletAddress(accounts[0]);
+      } catch (error) {
+        console.log('Error connecting...');
+      }
+
+
+        }else{
+            alert('Metamask not detected');
+        }
+    }
+
+     // Create a provider to interact with a smart contract
+    async function connectWallet() {
+    if(typeof window.ethereum !== 'undefined') {
+      await requestAccount();
+
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+    }
+  }
+
 
 
 
@@ -39,138 +87,51 @@ const Nav = () => {
                 <li class="mr-9 font-medium text-lg hover:text-gray-700">
                   <Link to="/Exchange">P2P</Link>
                 </li>
-              </ul>
-            </div>
-            <div class="w-auto hidden lg:block">
-              <div class="inline-block">
-                {/* {requestAccount == null ? (
-                  <Button
-                    name={"Connect Wallet"}
-                    className="py-3 px-5 w-full text-white font-semibold border border-primary rounded-xl focus:ring focus:ring-indigo-300 bg-primary hover:bg-primary transition ease-in-out duration-200"
-                    onClick={requestAccount}
-                  />
-                ) : (
-                  <h3> {walletAddress} </h3>
-                )} */}
-             
+                <li>
+              <div
+              onClick={() => setTheme(activeTheme)}
+              aria-label="Theme Switcher"
+              className="ml-3 bg-primary-light dark:bg-primary-dark p-3 shadow-sm rounded-xl cursor-pointer"
+              >
+              {activeTheme === 'dark' ? (
+                <FiMoon className="text-ternary-dark hover:text-gray-400 dark:text-ternary-light dark:hover:text-primary-light text-xl" />
+              ) : (
+                <FiSun className="text-gray-200 hover:text-gray-50 text-xl" />
+              )}
               </div>
+
+              </li>
+            </ul>
+
             </div>
 
-            {/* <div class="w-auto lg:hidden">
-              <a href="#">
-                <svg
-                  class="navbar-burger text-indigo-600"
-                  width="51"
-                  height="51"
-                  viewbox="0 0 56 56"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <rect
-                    width="56"
-                    height="56"
-                    rx="28"
-                    fill="currentColor"
-                  ></rect>
-                  <path
-                    d="M37 32H19M37 24H19"
-                    stroke="white"
-                    stroke-width="1.5"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  ></path>
-                </svg>
-              </a>
-            </div> */}
+            <div class="w-auto hidden lg:block">
+            <div className="mt-3 space-y-2 lg:hidden md:inline-block">
+                    <a
+                        href="javascript:void(0)"
+                        className="inline-block w-full px-4 py-2 text-center text-white bg-primary rounded-md shadow hover:bg-gray-800"
+                        onClick={requestAccount}
+                    >
+                    {!!walletAddress ? walletAddress : "Connect Wallet"}
+                    </a> 
+                </div>
+                <div className="hidden space-x-2 md:inline-block">
+                    <a
+                        href="javascript:void(0)"
+                        className="px-5 py-5 text-white bg-primary rounded-md shadow hover:bg-gray-800"
+                        onClick={requestAccount}
+                    >
+                      {!!walletAddress ? walletAddress : "Connect Wallet"}
+                    </a>
+
+                </div>
+            
+            </div>
+
+      
           </div>
         </div>
       </div>
-      {/* <div class="hidden navbar-menu fixed top-0 left-0 bottom-0 w-4/6 sm:max-w-xs z-50">
-        <div class="navbar-backdrop fixed inset-0 bg-gray-800 opacity-80"></div>
-        <nav class="relative z-10 px-9 pt-8 bg-white h-full overflow-y-auto">
-          <div class="flex flex-wrap justify-between h-full">
-            <div class="w-full">
-              <div class="flex items-center justify-between -m-2">
-                <div class="w-auto p-2"></div>
-                <div class="w-auto p-2">
-                  <a class="navbar-burger" href="#">
-                    <svg
-                      width="24"
-                      height="24"
-                      viewbox="0 0 24 24"
-                      fill="none"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M6 18L18 6M6 6L18 18"
-                        stroke="#111827"
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="flex flex-col justify-center py-16 w-full">
-              <ul>
-                <li class="mb-12">
-                  <Link
-                    to="/Ekoswap"
-                    class="font-medium hover:text-gray-700"
-                    href="#"
-                  >
-                    Swap
-                  </Link>
-                </li>
-                <li class="mb-12">
-                  <Link
-                    to="/Ekolend"
-                    class="font-medium hover:text-gray-700"
-                    href="#"
-                  >
-                    Lend
-                  </Link>
-                </li>
-                <li class="mb-12">
-                  <Link
-                    to="/Exchange"
-                    class="font-medium hover:text-gray-700"
-                    href="#"
-                  >
-                    P2P
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div class="flex flex-col justify-end w-full pb-8">
-              <div class="flex flex-wrap">
-                <div class="w-full">
-                  <div class="block">
-                    <button
-                      class="py-3 px-5 w-full text-white font-semibold border border-indigo-700 rounded-xl focus:ring focus:ring-indigo-300 bg-indigo-600 hover:bg-indigo-700 transition ease-in-out duration-200"
-                      type="button"
-                    >
-                      <li>
-                        {web3Provider == null ? (
-                          <Button
-                            name={"Connect Wallet"}
-                            className={"btn-1"}
-                            onClick={connectWallet}
-                          />
-                        ) : (
-                          <p>{web3Provider.providers.selectedAddress}</p>
-                        )}
-                      </li>
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </nav>
-      </div> */}
     </div>
   );
 }

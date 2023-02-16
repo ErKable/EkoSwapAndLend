@@ -4,7 +4,7 @@ import Navbar from "./components/Navbar/Nav"
 import Homepage from './pages/Homepage'
 import Ekoswap from './pages/EkoSwap/Ekoswap'
 import Ekolend from './pages/Ekolend/Ekolend';
-import Exchange from './pages/Exchange/Exchange';
+import Exchange from './pages/Exchange/Index';
 
 function App() {
 
