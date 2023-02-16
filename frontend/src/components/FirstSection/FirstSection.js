@@ -47,7 +47,7 @@ function FirstSection() {
             </div>
           </div>
 
-          <h1 class="mb-10 text-6xl md:text-8xl lg:text-6xl font-bold font-heading md:max-w-xl leading-none text-primary">SWAP, LEND & EXCHANGE EKOTOKENS.</h1>
+          <h1 class="mb-10 text-3xl md:text-8xl lg:text-6xl font-bold font-heading md:max-w-xl leading-none text-primary">SWAP, LEND & EXCHANGE EKOTOKENS.</h1>
           <p class="mb-11 text-lg text-gray-900 font-medium md:max-w-md">As a member of the Ekolance community, you can swap, lend and exchange your ekostables for ekotokens without hassles. </p>
           <div class="flex flex-wrap -m-2.5 mb-20">
             <div class="w-full md:w-auto p-2.5">
