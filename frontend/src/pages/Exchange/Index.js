@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./style.css";
-import Exchange from "./Exchange";
+
 
 function Index() {
   const [toggleState, setToggleState] = useState(1);
@@ -101,7 +101,7 @@ function Index() {
                 : "mSRG-container-inner"
             }
           >
-     nhjkhkjkl
+     nhjkhkjklfron
           </div>
         </div>
       </div>
